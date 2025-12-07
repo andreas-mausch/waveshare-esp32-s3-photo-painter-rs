@@ -3,6 +3,9 @@ use esp_idf_hal::gpio::*;
 use esp_idf_hal::peripherals::Peripherals;
 use esp_idf_hal::task::queue::Queue;
 
+const QUEUE_SIZE: usize = 10;
+const MESSAGE_BUTTON_PRESSED: u32 = 1;
+
 fn button_pressed<P1: Pin, P2: Pin>(
   button: &mut PinDriver<P1, Input>,
   led_state: &mut bool,
@@ -31,7 +34,7 @@ fn main() -> anyhow::Result<()> {
 
   log::info!("Hello, world!");
 
-  let queue = Queue::new(10);
+  let queue = Queue::new(QUEUE_SIZE);
 
   let peripherals = Peripherals::take()?;
 
@@ -53,7 +56,7 @@ fn main() -> anyhow::Result<()> {
     button
       .subscribe_nonstatic(|| {
         queue
-          .send_front(1, TickType::new_millis(5000).into())
+          .send_front(MESSAGE_BUTTON_PRESSED, TickType::new_millis(5000).into())
           .unwrap();
       })
       .unwrap();
@@ -61,9 +64,15 @@ fn main() -> anyhow::Result<()> {
   button.enable_interrupt()?;
 
   loop {
-    if let Some(message) = queue.recv_front(TickType::new_millis(5000).into()) {
+    if let Some((message, _higher_priority_task_awoken)) =
+      queue.recv_front(TickType::new_millis(5000).into())
+    {
       log::info!("Message received from queue: {:?}", message);
-      button_pressed(&mut button, &mut led_state, &mut green_led);
+
+      match message {
+        MESSAGE_BUTTON_PRESSED => button_pressed(&mut button, &mut led_state, &mut green_led),
+        _ => log::info!("Unknown message received, ignoring")
+      }
     }
 
     // debounce
