@@ -3,7 +3,11 @@ use esp_idf_hal::gpio::*;
 use esp_idf_hal::peripherals::Peripherals;
 use esp_idf_hal::task::queue::Queue;
 
-fn button_pressed<P1: Pin, P2: Pin>(button: &mut PinDriver<P1, Input>, led_state: &mut bool, green_led: &mut PinDriver<P2, Output>) {
+fn button_pressed<P1: Pin, P2: Pin>(
+  button: &mut PinDriver<P1, Input>,
+  led_state: &mut bool,
+  green_led: &mut PinDriver<P2, Output>
+) {
   log::info!("Button pressed");
 
   if *led_state {
@@ -48,7 +52,9 @@ fn main() -> anyhow::Result<()> {
   unsafe {
     button
       .subscribe_nonstatic(|| {
-        queue.send_front(1, TickType::new_millis(5000).into()).unwrap();
+        queue
+          .send_front(1, TickType::new_millis(5000).into())
+          .unwrap();
       })
       .unwrap();
   }
