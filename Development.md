@@ -64,7 +64,7 @@ cargo update
 
 ```bash
 cargo fmt
-cargo check
+cargo check --release
 cargo fix
-cargo clippy --all-targets --all-features -- --deny warnings
+cargo clippy --release --all-targets --all-features -- --deny warnings
 ```
