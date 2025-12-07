@@ -11,7 +11,12 @@ name = "esp32-s3-photo-painter-rs"
 harness = false # do not use the built-in cargo test harness -> resolve rust-analyzer errors
 
 [profile.release]
-opt-level = "s"
+codegen-units = 1 # LLVM can perform better optimizations using a single thread
+debug-assertions = false
+incremental = false
+lto = 'fat'
+opt-level = 's'
+overflow-checks = false
 
 [profile.dev]
 debug = true    # Symbols are nice, and they don't increase the size on Flash
