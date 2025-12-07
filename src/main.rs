@@ -1,8 +1,21 @@
-use core::num::NonZero;
-use esp_idf_hal::delay::FreeRtos;
+use esp_idf_hal::delay::{FreeRtos, TickType};
 use esp_idf_hal::gpio::*;
 use esp_idf_hal::peripherals::Peripherals;
-use esp_idf_hal::task::notification::Notification;
+use esp_idf_hal::task::queue::Queue;
+
+fn button_pressed<P1: Pin, P2: Pin>(button: &mut PinDriver<P1, Input>, led_state: &mut bool, green_led: &mut PinDriver<P2, Output>) {
+  log::info!("Button pressed");
+
+  if *led_state {
+    green_led.set_high().unwrap();
+    *led_state = false;
+  } else {
+    green_led.set_low().unwrap();
+    *led_state = true;
+  }
+
+  button.enable_interrupt().unwrap();
+}
 
 fn main() -> anyhow::Result<()> {
   // It is necessary to call this function once. Otherwise, some patches to the runtime
@@ -13,6 +26,8 @@ fn main() -> anyhow::Result<()> {
   esp_idf_svc::log::EspLogger::initialize_default();
 
   log::info!("Hello, world!");
+
+  let queue = Queue::new(10);
 
   let peripherals = Peripherals::take()?;
 
@@ -29,32 +44,20 @@ fn main() -> anyhow::Result<()> {
   red_led.set_high()?;
   green_led.set_high()?;
 
+  // register interrupt callback, here it's a closure on stack
+  unsafe {
+    button
+      .subscribe_nonstatic(|| {
+        queue.send_front(1, TickType::new_millis(5000).into()).unwrap();
+      })
+      .unwrap();
+  }
+  button.enable_interrupt()?;
+
   loop {
-    // prepare communication channel
-    let notification = Notification::new();
-    let waker = notification.notifier();
-
-    // register interrupt callback, here it's a closure on stack
-    unsafe {
-      button
-        .subscribe_nonstatic(move || {
-          waker.notify(NonZero::new(1).unwrap());
-        })
-        .unwrap();
-    }
-
-    // enable interrupt, will be automatically disabled after being triggered
-    button.enable_interrupt()?;
-    // block until notified
-    notification.wait_any();
-
-    // toggle the LED
-    if led_state {
-      green_led.set_high()?;
-      led_state = false;
-    } else {
-      green_led.set_low()?;
-      led_state = true;
+    if let Some(message) = queue.recv_front(TickType::new_millis(5000).into()) {
+      log::info!("Message received from queue: {:?}", message);
+      button_pressed(&mut button, &mut led_state, &mut green_led);
     }
 
     // debounce
