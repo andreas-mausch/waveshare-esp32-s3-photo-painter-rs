@@ -10,18 +10,20 @@ fn button_pressed<P1: Pin, P2: Pin>(
   button: &mut PinDriver<P1, Input>,
   led_state: &mut bool,
   green_led: &mut PinDriver<P2, Output>
-) {
+) -> anyhow::Result<()> {
   log::info!("Button pressed");
 
   if *led_state {
-    green_led.set_high().unwrap();
+    green_led.set_high()?;
     *led_state = false;
   } else {
-    green_led.set_low().unwrap();
+    green_led.set_low()?;
     *led_state = true;
   }
 
-  button.enable_interrupt().unwrap();
+  button.enable_interrupt()?;
+
+  Ok(())
 }
 
 fn main() -> anyhow::Result<()> {
@@ -55,11 +57,8 @@ fn main() -> anyhow::Result<()> {
   unsafe {
     button
       .subscribe_nonstatic(|| {
-        queue
-          .send_front(MESSAGE_BUTTON_PRESSED, TickType::new_millis(5000).into())
-          .unwrap();
-      })
-      .unwrap();
+        queue.send_front(MESSAGE_BUTTON_PRESSED, TickType::new_millis(5000).into()).unwrap();
+      })?;
   }
   button.enable_interrupt()?;
 
@@ -70,7 +69,7 @@ fn main() -> anyhow::Result<()> {
       log::info!("Message received from queue: {:?}", message);
 
       match message {
-        MESSAGE_BUTTON_PRESSED => button_pressed(&mut button, &mut led_state, &mut green_led),
+        MESSAGE_BUTTON_PRESSED => button_pressed(&mut button, &mut led_state, &mut green_led)?,
         _ => log::info!("Unknown message received, ignoring")
       }
     }
