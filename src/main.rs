@@ -57,6 +57,7 @@ fn main() -> anyhow::Result<()> {
   unsafe {
     button
       .subscribe_nonstatic(|| {
+        #[allow(clippy::unwrap_used)]
         queue.send_front(MESSAGE_BUTTON_PRESSED, TickType::new_millis(5000).into()).unwrap();
       })?;
   }
