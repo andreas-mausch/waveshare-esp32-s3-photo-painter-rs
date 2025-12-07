@@ -45,3 +45,8 @@ esp-idf-svc = "0.51"
 
 [build-dependencies]
 embuild = "0.33"
+
+[lints.clippy]
+panic = "warn"
+expect_used = "warn"
+unwrap_used = "warn"

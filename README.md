@@ -15,3 +15,7 @@ It is also a learning project for me to get to know the ESP32 better.
 
 [1]: https://www.waveshare.com/esp32-s3-photopainter.htm "Waveshare ESP32-S3-PhotoPainter"
 [2]: https://github.com/waveshareteam/ESP32-S3-PhotoPainter/tree/v2.1.2/01_Example/xiaozhi-esp32 "Original Firmware"
+
+# Development
+
+See [Development.md](Development.md).
