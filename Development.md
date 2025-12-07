@@ -15,8 +15,14 @@ source ~/export-esp.sh
 # Build
 
 ```bash
-cargo build
+cargo build --release
 ```
+
+> WARNING: use --release
+>  We *strongly* recommend using release profile when building esp-hal.
+>  The dev profile can potentially be one or more orders of magnitude
+>  slower than release, and may cause issues with timing-senstive
+>  peripherals and/or devices.
 
 # Test
 
@@ -29,7 +35,7 @@ cargo test --all
 To flash and run the firmware on a ESP32-PhotoPainter, run this:
 
 ```bash
-cargo espflash flash --monitor
+cargo espflash flash --release --monitor
 ```
 
 # Maintenance
