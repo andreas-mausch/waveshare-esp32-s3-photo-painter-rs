@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["neonew"]
 edition = "2021"
 resolver = "2"
-rust-version = "1.77"
+rust-version = "1.79"
 
 [[bin]]
 name = "esp32-s3-photo-painter-rs"
