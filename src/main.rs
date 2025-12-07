@@ -21,6 +21,9 @@ fn button_pressed<P1: Pin, P2: Pin>(
     *led_state = true;
   }
 
+  // Note that PinDriver::enable_interrupt should also be called after each received
+  // notification from non-ISR context, because the driver will automatically
+  // disable ISR interrupts on each received ISR notification
   button.enable_interrupt()?;
 
   Ok(())
