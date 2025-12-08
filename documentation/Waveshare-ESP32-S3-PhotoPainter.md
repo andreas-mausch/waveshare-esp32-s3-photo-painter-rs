@@ -1,5 +1,7 @@
 # Details and Specs
 
+Source: https://www.waveshare.com/esp32-s3-photopainter.htm
+
 ![Details](Waveshare-ESP32-S3-PhotoPainter-details.jpg)
 
 1. ESP32-S3-WROOM-1-N16R8
@@ -43,15 +45,21 @@ Waveshare has different kind of e-Paper displays, so watch out to not confuse th
 
 The previous version I owned uses the [7.3inch e-Paper HAT (F)][2].
 
-|                   | **ESP32-S3-PhotoPainter**                  | **PhotoPainter**         |
-|-------------------|--------------------------------------------|--------------------------|
-| Processor         | ESP32-S3-WROOM-1-N16R8                     | Raspberry Pi Pico RP2040 |
-| Display           | 7.3inch e-Paper HAT (E)                    | 7.3inch e-Paper HAT (F)  |
-| Colors            | 6 (Black, White, Green, Blue, Red, Yellow) | 7 (+ Orange)             |
-| Refresh time      | 12s                                        | 35s                      |
-| WiFi              | 🟢                                         | 🔴                       |
-| Bluetooth LE      | 🟢                                         | 🔴                       |
-| Bluetooth Classic | 🔴                                         | 🔴                       |
-
 [1]: https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(E)_Manual
 [2]: https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(F)_Manual
+
+# Comparison
+
+|                   | **ESP32-S3-PhotoPainter**                  | **PhotoPainter**         | **RPi Zero PhotoPainter** |
+|-------------------|--------------------------------------------|--------------------------|---------------------------|
+| Processor         | ESP32-S3-WROOM-1-N16R8                     | Raspberry Pi Pico RP2040 | Raspberry Pi Zero 2W[^1]  |
+| Flash             | 16 MB                                      | 2 MB                     | microSD card              |
+| RAM               | 512 KB SRAM + 8 MB PSRAM                   | 264 KB SRAM              | 512 MB                    |
+| Display           | 7.3inch e-Paper HAT (E)                    | 7.3inch e-Paper HAT (F)  | 7.3inch e-Paper HAT (E)   |
+| Colors            | 6 (Black, White, Green, Blue, Red, Yellow) | 7 (+ Orange)             | 6                         |
+| Refresh time      | 12s                                        | 35s                      | 12s                       |
+| WiFi              | 🟢                                         | 🔴                       | 🟢                        |
+| Bluetooth LE      | 🟢                                         | 🔴                       | 🟢                        |
+| Bluetooth Classic | 🔴                                         | 🔴                       | 🟢                        |
+
+[^1]: You can also use a different Pi Zero model
