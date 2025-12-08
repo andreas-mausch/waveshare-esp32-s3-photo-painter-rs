@@ -41,13 +41,17 @@
 The display is the [7.3inch e-Paper HAT (E)][1].
 Waveshare has different kind of e-Paper displays, so watch out to not confuse them.
 
-The previous version I owned (with the Raspberry Pi Pico RP2040)
-uses the [7.3inch e-Paper HAT (F)][2].
+The previous version I owned uses the [7.3inch e-Paper HAT (F)][2].
 
-|              | **7.3inch e-Paper HAT (E)**                | **7.3inch e-Paper HAT (F)** |
-|--------------|--------------------------------------------|-----------------------------|
-| Colors       | 6 (Black, White, Green, Blue, Red, Yellow) | 7 (+ Orange)                |
-| Refresh time | 12s                                        | 35s                         |
+|                   | **ESP32-S3-PhotoPainter**                  | **PhotoPainter**         |
+|-------------------|--------------------------------------------|--------------------------|
+| Processor         | ESP32-S3-WROOM-1-N16R8                     | Raspberry Pi Pico RP2040 |
+| Display           | 7.3inch e-Paper HAT (E)                    | 7.3inch e-Paper HAT (F)  |
+| Colors            | 6 (Black, White, Green, Blue, Red, Yellow) | 7 (+ Orange)             |
+| Refresh time      | 12s                                        | 35s                      |
+| WiFi              | 🟢                                         | 🔴                       |
+| Bluetooth LE      | 🟢                                         | 🔴                       |
+| Bluetooth Classic | 🔴                                         | 🔴                       |
 
 [1]: https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(E)_Manual
 [2]: https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(F)_Manual
