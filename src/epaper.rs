@@ -14,6 +14,7 @@ pub const EPD_7IN3F_HEIGHT: usize = 480;
 #[derive(Clone, Copy, Debug)]
 pub enum Error {
   Timeout,
+  #[allow(dead_code)]
   SpiError(EspError)
 }
 
@@ -26,6 +27,7 @@ pub enum Color {
   Red = 0b011,
   Blue = 0b101,
   Green = 0b110,
+  #[allow(dead_code)]
   Clean = 0b111 // Not a real color, used to clear the display.
 }
 
@@ -93,7 +95,7 @@ where
   }
 
   /// Clears the display with the given color.
-  pub fn clear(&mut self, color: Color) -> Result<(), Error> {
+  pub fn _clear(&mut self, color: Color) -> Result<(), Error> {
     self.send_cmd(0x10)?;
     let color = color as u8;
     let data = [color << 4 | color; EPD_7IN3F_WIDTH / 2];
@@ -135,8 +137,8 @@ where
     Ok(())
   }
 
-  /// Sends the given image to the display.
-  /*pub fn show_image(
+  /* /// Sends the given image to the display.
+  pub fn show_image(
     &mut self,
     image: &DisplayBuffer
   ) -> Result<(), Error> {
@@ -150,10 +152,10 @@ where
 
     self.display_frame()?;
     Ok(())
-  }*/
+  } */
 
   /// Puts the display in deep sleep mode.
-  pub fn deep_sleep(&mut self) -> Result<(), Error> {
+  pub fn _deep_sleep(&mut self) -> Result<(), Error> {
     self.send_cmd_with_data(0x07, &[0xA5])?;
     Ok(())
   }
