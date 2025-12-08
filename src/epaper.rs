@@ -7,14 +7,16 @@ use esp_idf_hal::gpio::PinDriver;
 use esp_idf_hal::spi::SpiDeviceDriver;
 use esp_idf_hal::spi::SpiDriver;
 use esp_idf_hal::sys::EspError;
+use thiserror::Error;
 
 pub const EPD_7IN3F_WIDTH: usize = 800;
 pub const EPD_7IN3F_HEIGHT: usize = 480;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Error)]
 pub enum Error {
+  #[error("Timeout")]
   Timeout,
-  #[allow(dead_code)]
+  #[error("SPI Error: {0}")]
   SpiError(EspError)
 }
 

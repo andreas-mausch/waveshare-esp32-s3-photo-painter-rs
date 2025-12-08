@@ -32,6 +32,7 @@ anyhow = "1.0.100"
 log = "0.4"
 esp-idf-svc = "0.51"
 esp-idf-hal = "0.45.2"
+thiserror = "2.0.17"
 
 # --- Optional Embassy Integration ---
 # esp-idf-svc = { version = "0.51", features = ["critical-section", "embassy-time-driver", "embassy-sync"] }

@@ -109,9 +109,9 @@ fn main() -> anyhow::Result<()> {
   );
 
   log::info!("Drawing..");
-  epaper.init().unwrap();
-  // epaper.clear(epaper::Color::Blue).unwrap();
-  epaper.show_seven_color_blocks().unwrap();
+  epaper.init()?;
+  // epaper.clear(epaper::Color::Blue)?;
+  epaper.show_seven_color_blocks()?;
   log::info!("Done");
 
   let mut led_state = false;
