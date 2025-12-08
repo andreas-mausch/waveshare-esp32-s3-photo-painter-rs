@@ -66,5 +66,6 @@ cargo update
 cargo fmt
 cargo check --release
 cargo fix
-cargo clippy --release --all-targets --all-features -- --deny warnings
+cargo check-formatting
+cargo lint
 ```

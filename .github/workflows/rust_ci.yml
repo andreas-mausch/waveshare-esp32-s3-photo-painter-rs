@@ -23,10 +23,10 @@ jobs:
         action:
           - command: build
             args: --release
-          - command: fmt
-            args: --all -- --check --color always
-          - command: clippy
-            args: --all-targets --all-features --workspace -- -D warnings
+          - command: check-formatting
+          - command: check
+            args: --release
+          - command: lint
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
