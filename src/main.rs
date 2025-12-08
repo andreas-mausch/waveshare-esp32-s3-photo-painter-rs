@@ -1,15 +1,26 @@
+mod epaper;
+
 use esp_idf_hal::delay::{FreeRtos, TickType};
 use esp_idf_hal::gpio::*;
+use esp_idf_hal::peripheral::Peripheral;
 use esp_idf_hal::peripherals::Peripherals;
+use esp_idf_hal::prelude::FromValueType;
+use esp_idf_hal::spi::config::{Config, Duplex::Half, MODE_0};
+use esp_idf_hal::spi::SpiAnyPins;
+use esp_idf_hal::spi::SpiDeviceDriver;
+use esp_idf_hal::spi::SpiDriver;
+use esp_idf_hal::spi::SpiDriverConfig;
 use esp_idf_hal::task::queue::Queue;
+
+use crate::epaper::EPaper7In3F;
 
 const QUEUE_SIZE: usize = 10;
 const MESSAGE_BUTTON_PRESSED: u32 = 1;
 
-fn button_pressed<P1: Pin, P2: Pin>(
-  button: &mut PinDriver<P1, Input>,
+fn button_pressed<P5: Pin, P6: Pin>(
+  button: &mut PinDriver<P5, Input>,
   led_state: &mut bool,
-  green_led: &mut PinDriver<P2, Output>
+  green_led: &mut PinDriver<P6, Output>
 ) -> anyhow::Result<()> {
   log::info!("Button pressed");
 
@@ -29,6 +40,30 @@ fn button_pressed<P1: Pin, P2: Pin>(
   Ok(())
 }
 
+pub fn spi_init<'a, SPI: SpiAnyPins, P1: OutputPin, P2: OutputPin>(
+  spi: impl Peripheral<P = SPI> + 'a,
+  sclk: &'a mut P1,
+  sdo: &'a mut P2
+) -> anyhow::Result<SpiDeviceDriver<'a, SpiDriver<'a>>> {
+  let sdi = AnyInputPin::none();
+  let cs = AnyOutputPin::none();
+
+  let config = Config::new()
+    .baudrate(2u32.MHz().into())
+    .data_mode(MODE_0)
+    .duplex(Half);
+
+  Ok(SpiDeviceDriver::new_single(
+    spi,
+    sclk,
+    sdo,
+    sdi,
+    cs,
+    &SpiDriverConfig::new(),
+    &config
+  )?)
+}
+
 fn main() -> anyhow::Result<()> {
   // It is necessary to call this function once. Otherwise, some patches to the runtime
   // implemented by esp-idf-sys might not link properly. See https://github.com/esp-rs/esp-idf-template/issues/71
@@ -41,7 +76,12 @@ fn main() -> anyhow::Result<()> {
 
   let queue = Queue::new(QUEUE_SIZE);
 
-  let peripherals = Peripherals::take()?;
+  let mut peripherals = Peripherals::take()?;
+  let spi_device = spi_init(
+    &mut peripherals.spi3,
+    &mut peripherals.pins.gpio10,
+    &mut peripherals.pins.gpio11
+  )?;
 
   // See here:
   // https://github.com/esp-rs/esp-idf-hal/blob/v0.45.2/examples/button_interrupt.rs
@@ -50,6 +90,29 @@ fn main() -> anyhow::Result<()> {
   let mut button = PinDriver::input(peripherals.pins.gpio4)?;
   button.set_pull(Pull::Up)?;
   button.set_interrupt_type(InterruptType::PosEdge)?;
+
+  let mut epaper_dc_pin = PinDriver::output(peripherals.pins.gpio8)?;
+  let mut epaper_cs_pin = PinDriver::output(peripherals.pins.gpio9)?;
+  let mut epaper_reset_pin = PinDriver::output(peripherals.pins.gpio12)?;
+  let epaper_busy_pin = PinDriver::input(peripherals.pins.gpio13)?;
+
+  epaper_dc_pin.set_low()?;
+  epaper_cs_pin.set_high()?;
+  epaper_reset_pin.set_low()?;
+
+  let mut epaper = EPaper7In3F::new(
+    spi_device,
+    epaper_dc_pin,
+    epaper_cs_pin,
+    epaper_reset_pin,
+    epaper_busy_pin
+  );
+
+  log::info!("Drawing..");
+  epaper.init().unwrap();
+  // epaper.clear(epaper::Color::Blue).unwrap();
+  epaper.show_seven_color_blocks().unwrap();
+  log::info!("Done");
 
   let mut led_state = false;
   // Turn both LEDs off
