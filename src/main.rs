@@ -121,11 +121,12 @@ fn main() -> anyhow::Result<()> {
 
   // register interrupt callback, here it's a closure on stack
   unsafe {
-    button
-      .subscribe_nonstatic(|| {
-        #[allow(clippy::unwrap_used)]
-        queue.send_front(MESSAGE_BUTTON_PRESSED, TickType::new_millis(5000).into()).unwrap();
-      })?;
+    button.subscribe_nonstatic(|| {
+      #[allow(clippy::unwrap_used)]
+      queue
+        .send_front(MESSAGE_BUTTON_PRESSED, TickType::new_millis(5000).into())
+        .unwrap();
+    })?;
   }
   button.enable_interrupt()?;
 
