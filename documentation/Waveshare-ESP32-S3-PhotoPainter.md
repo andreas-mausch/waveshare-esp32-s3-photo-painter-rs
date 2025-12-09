@@ -48,18 +48,28 @@ The previous version I owned uses the [7.3inch e-Paper HAT (F)][2].
 [1]: https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(E)_Manual
 [2]: https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(F)_Manual
 
-# Comparison
+# PhotoPainter Comparison
 
-|                   | **ESP32-S3-PhotoPainter**                  | **PhotoPainter**         | **RPi Zero PhotoPainter** |
-|-------------------|--------------------------------------------|--------------------------|---------------------------|
-| Processor         | ESP32-S3-WROOM-1-N16R8                     | Raspberry Pi Pico RP2040 | Raspberry Pi Zero 2W[^1]  |
-| Flash             | 16 MB                                      | 2 MB                     | microSD card              |
-| RAM               | 512 KB SRAM + 8 MB PSRAM                   | 264 KB SRAM              | 512 MB                    |
-| Display           | 7.3inch e-Paper HAT (E)                    | 7.3inch e-Paper HAT (F)  | 7.3inch e-Paper HAT (E)   |
-| Colors            | 6 (Black, White, Green, Blue, Red, Yellow) | 7 (+ Orange)             | 6                         |
-| Refresh time      | 12s                                        | 35s                      | 12s                       |
-| WiFi              | 🟢                                         | 🔴                       | 🟢                        |
-| Bluetooth LE      | 🟢                                         | 🔴                       | 🟢                        |
-| Bluetooth Classic | 🔴                                         | 🔴                       | 🟢                        |
+|                   | **ESP32-S3-PhotoPainter** | **PhotoPainter**         | **RPi Zero PhotoPainter** |
+|-------------------|---------------------------|--------------------------|---------------------------|
+| Processor         | ESP32-S3-WROOM-1-N16R8    | Raspberry Pi Pico RP2040 | Raspberry Pi Zero 2W[^1]  |
+| Flash             | 16 MB                     | 2 MB                     | microSD card              |
+| RAM               | 512 KB SRAM + 8 MB PSRAM  | 264 KB SRAM              | 512 MB                    |
+| Display           | 7.3inch e-Paper HAT (E)   | 7.3inch e-Paper HAT (F)  | 7.3inch e-Paper HAT (E)   |
+| WiFi              | 🟢                        | 🔴                       | 🟢                        |
+| Bluetooth LE      | 🟢                        | 🔴                       | 🟢                        |
+| Bluetooth Classic | 🔴                        | 🔴                       | 🟢                        |
 
 [^1]: You can also use a different Pi Zero model
+
+# Panel Comparison
+
+|              | **7.3inch e-Paper HAT (E)**                | **7.3inch e-Paper HAT (F)**      |
+|--------------|--------------------------------------------|----------------------------------|
+| Technology   | Spectra 6 (E6)                             | Advanced Color ePaper 7 (ACeP 7) |
+| Colors       | 6 (Black, White, Green, Blue, Red, Yellow) | 7 (+ Orange)                     |
+| Refresh time | 12s                                        | 35s                              |
+| Release date | 2024                                       | 2018                             |
+| Notes        | more vibrant colors                        |                                  |
+
+Video: [ACeP vs Spectra 6](https://www.youtube.com/watch?v=FVqNkZOOpg4)
